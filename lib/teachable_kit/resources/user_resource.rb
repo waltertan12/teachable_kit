@@ -36,7 +36,7 @@ module TeachableKit
       User.new(user_options)
     end
 
-    def show_user(email:, token:)
+    def find(email:, token:)
       res = @connection.get do |req|
         req.url '/api/users/current_user/edit.json'
         req.params['user_email'] = email

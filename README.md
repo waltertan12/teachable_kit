@@ -1,8 +1,6 @@
 # TeachableKit
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/teachable_kit`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+TeachableKit is a Ruby gem that wraps around the Teachable Mock API
 
 ## Installation
 
@@ -22,7 +20,53 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+To use TeachableKit, simply initialize the client
+```ruby
+client = TeachableKit::Client.new
+```
+## Design
+The design for TeachableKit was taken heavily from DigitalOcean's [DropletKit](https://github.com/digitalocean/droplet_kit).
+
+TeachableKit follows a strict design of resources as methods on your client. For examples, for users, you will call your client like this:
+```ruby
+client = TeachableKit::Client.new
+client.users #=> UserResource
+```
+
+TeachableKit will return Plain Old Ruby objects that contain the information provided by the API. For example:
+```ruby
+client = TeachableKit::Client.new
+client.users.sign_in(email: 'A VALID EMAIL', password: 'A VALID PASSWORD')
+
+# TeachableKit::User(id: 123, name: Nil, email: 'A VALID EMAIL', ...)
+```
+
+## Resources and Actions
+### UserResource
+```ruby
+client = TeachableKit::Client.new
+client.users
+```
+
+#### Actions supported
+```ruby
+client.users.sign_in(email:, password:)
+client.users.sign_up(email:, password:, password_confirmation:)
+client.users.find(email:, token:)
+```
+
+### OrderResource
+```ruby
+client = TeachableKit::Client.new
+client.orders
+```
+
+#### Actions supported
+```ruby
+client.orders.all(user:)
+client.orders.create(user:, total:, total_quantity:, special_instructions: nil)
+client.orders.delete(user:, order_id:) # Returns nil
+```
 
 ## Development
 
