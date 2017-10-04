@@ -2,7 +2,7 @@ require 'json'
 
 module TeachableKit
   class OrderResource < BaseResource
-    def create(user:, total:, total_quantity:, special_instructions: nil)
+    def create(user:, email:, number:, total:, total_quantity:, special_instructions: nil)
       res = @connection.post do |req|
         req.url '/api/orders.json'
         req.params['user_email'] = user.email
@@ -11,10 +11,12 @@ module TeachableKit
           order: {
             total: total,
             total_quantity: total_quantity,
-            email: user.email,
+            email: email,
+            number: number,
             special_instructions: special_instructions
           }
         }.to_json
+
       end
 
       order_options = self.handle_response(res: res)
