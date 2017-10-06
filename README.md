@@ -69,7 +69,7 @@ client.orders
 #### Actions supported
 ```ruby
 client.orders.all # Returns all of the orders for the current user
-client.orders.create(total:, total_quantity:, special_instructions: nil) # Creates a new user for the current user
+client.orders.create(total:, total_quantity:, special_instructions: nil) # Creates a new order for the current user
 client.orders.delete(order_id:) # Deletes an order for the current user
 ```
 
