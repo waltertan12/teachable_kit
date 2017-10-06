@@ -20,9 +20,13 @@ Or install it yourself as:
 
 ## Usage
 
-To use TeachableKit, simply initialize the client
+To use TeachableKit, simply initialize the client and either sign up or sign in
 ```ruby
 client = TeachableKit::Client.new
+
+client.sign_up(email: 'email@example.com', password: 'password', password_confirmation: 'password')
+# or
+client.sign_in(email: 'email@example.com', password: 'password')
 ```
 ## Design
 The design for TeachableKit was taken heavily from DigitalOcean's [DropletKit](https://github.com/digitalocean/droplet_kit).
@@ -36,36 +40,37 @@ client.users #=> UserResource
 TeachableKit will return Plain Old Ruby objects that contain the information provided by the API. For example:
 ```ruby
 client = TeachableKit::Client.new
-client.users.sign_in(email: 'A VALID EMAIL', password: 'A VALID PASSWORD')
+client.sign_in(email: 'email@example.com', password: 'password')
+client.users.get
 
-# TeachableKit::User(id: 123, name: Nil, email: 'A VALID EMAIL', ...)
+# TeachableKit::User(id: 123, name: Nil, email: 'email@example.com', ...)
 ```
 
 ## Resources and Actions
 ### UserResource
 ```ruby
 client = TeachableKit::Client.new
+client.sign_in(email: 'email@example.com', password: 'password')
 client.users
 ```
 
 #### Actions supported
 ```ruby
-client.users.sign_in(email:, password:)
-client.users.sign_up(email:, password:, password_confirmation:)
-client.users.find(email:, token:)
+client.users.get # Returns the current user
 ```
 
 ### OrderResource
 ```ruby
 client = TeachableKit::Client.new
+client.sign_in(email: 'email@example.com', password: 'password')
 client.orders
 ```
 
 #### Actions supported
 ```ruby
-client.orders.all(user:)
-client.orders.create(user:, total:, total_quantity:, special_instructions: nil)
-client.orders.delete(user:, order_id:) # Returns nil
+client.orders.all # Returns all of the orders for the current user
+client.orders.create(total:, total_quantity:, special_instructions: nil) # Creates a new user for the current user
+client.orders.delete(order_id:) # Deletes an order for the current user
 ```
 
 ## Development
