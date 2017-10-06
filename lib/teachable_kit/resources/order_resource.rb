@@ -2,16 +2,16 @@ require 'json'
 
 module TeachableKit
   class OrderResource < BaseResource
-    def create(user:, email:, number:, total:, total_quantity:, special_instructions: nil)
+    def create(number:, total:, total_quantity:, special_instructions: nil)
       res = @connection.post do |req|
         req.url '/api/orders.json'
-        req.params['user_email'] = user.email
-        req.params['user_token'] = user.tokens
+        req.params['user_email'] = @user.email
+        req.params['user_token'] = @user.tokens
         req.body = {
           order: {
             total: total,
             total_quantity: total_quantity,
-            email: email,
+            email: @user.email,
             number: number,
             special_instructions: special_instructions
           }
@@ -24,11 +24,11 @@ module TeachableKit
       Order.new(order_options)
     end
 
-    def all(user:)
+    def all
       res = @connection.get do |req|
         req.url '/api/orders.json'
-        req.params['user_email'] = user.email
-        req.params['user_token'] = user.tokens
+        req.params['user_email'] = @user.email
+        req.params['user_token'] = @user.tokens
       end
 
       orders = self.handle_response(res: res)
@@ -36,12 +36,14 @@ module TeachableKit
       orders.map { |order| Order.new(order) }
     end
 
-    def delete(user:, order_id:)
+    def delete(order_id:)
       res = @connection.delete do |req|
         req.url "/api/orders/#{order_id}.json"
-        req.params['user_email'] = user.email
-        req.params['user_token'] = user.tokens
+        req.params['user_email'] = @user.email
+        req.params['user_token'] = @user.tokens
       end
+
+      orders = self.handle_response(res: res)
 
       nil
     end

@@ -15,4 +15,7 @@ module TeachableKit
 
   # Errors
   Error = Class.new(StandardError)
+
+  # Utils
+  autoload :Utils, 'teachable_kit/utils/utils'
 end
